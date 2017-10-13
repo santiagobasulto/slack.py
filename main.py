@@ -21,8 +21,50 @@ def slack(ctx, token, debug):
     ctx.obj['client'] = SlackClient(token)
 
 
-HEADER = ("|{id:^15}|{name:^30}|{archived:^12}|{general:^12}|"
-          "{private:^12}|{members:^12}")
+class ChannelSubCommand(object):
+    def __init__(self, client, channels, **kwargs):
+        self.client = client
+        self.channels = channels
+        self.extras = kwargs
+
+    def echo(self, *args, **kwargs):
+        return click.echo(*args, **kwargs)
+
+
+class ListChannels(ChannelSubCommand):
+    LINE_TEMPLATE = ("|{id:^15}|{name:^30}|{archived:^12}|{general:^12}|"
+                     "{private:^12}|{members:^12}")
+
+    def execute(self):
+        self.echo(self.LINE_TEMPLATE.format(
+            id='Channel ID', name='Channel Name', archived='Is Archived',
+            general="Is General", private="Is Private", members="Nº Members"))
+
+        for channel in self.channels:
+            self.echo(self.LINE_TEMPLATE.format(
+                id=channel.id, name=channel.name,
+                archived=yes_no(channel.is_archived),
+                general=yes_no(channel.is_general),
+                private=yes_no(channel.is_private),
+                members=channel.num_members))
+
+
+class DeleteChannels(ChannelSubCommand):
+    def __delete(self, channel):
+        self.client._client.api_call('channels.delete', channel=channel.id)
+
+    def execute(self):
+        self.echo("==== Deleting Channels ====")
+
+        count = 0
+        for channel in self.channels:
+            self.echo("{id:<15} - {name:<30}".format(
+                id=channel.id,
+                name=channel.name))
+            self.__delete(channel)
+            count += 1
+
+        self.echo("{} channels successfully deleted".format(count))
 
 
 @slack.command()
@@ -35,14 +77,23 @@ HEADER = ("|{id:^15}|{name:^30}|{archived:^12}|{general:^12}|"
 @click.pass_context
 def list_channels(ctx, exclude_archived, starts_with,
                   contains, delete, archive, dry_run):
+    subcommand = 'list'
+    subcommand_classes = {
+        'list': ListChannels,
+        'delete': DeleteChannels
+    }
+
     if all([delete, archive]):
         ctx.fail("You can't set both --delete and --archive.")
+
     if delete:
         click.confirm(
             'Are you sure you want to delete these channels?', abort=True)
+        subcommand = 'delete'
     if archive:
         click.confirm(
             'Are you sure you want to archive these channels?', abort=True)
+        subcommand = 'archive'
 
     client = ctx.obj['client']
     channels = client.channels(**default_options(
@@ -52,17 +103,9 @@ def list_channels(ctx, exclude_archived, starts_with,
         exclude_members=True
     ))
 
-    click.echo(HEADER.format(
-        id='Channel ID', name='Channel Name', archived='Is Archived',
-        general="Is General", private="Is Private", members="Nº Members"))
-
-    for channel in channels:
-        click.echo(HEADER.format(
-            id=channel.id, name=channel.name,
-            archived=yes_no(channel.is_archived),
-            general=yes_no(channel.is_general),
-            private=yes_no(channel.is_private),
-            members=channel.num_members))
+    SubcommandClass = subcommand_classes[subcommand]
+    cmd = SubcommandClass(client, channels, dry_run=dry_run)
+    cmd.execute()
 
 
 @slack.command()
