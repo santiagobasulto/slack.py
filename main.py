@@ -49,22 +49,36 @@ class ListChannels(ChannelSubCommand):
                 members=channel.num_members))
 
 
-class DeleteChannels(ChannelSubCommand):
-    def __delete(self, channel):
-        self.client._client.api_call('channels.delete', channel=channel.id)
+class ActionChannelSubcommand(ChannelSubCommand):
+    SLACK_API_METHOD = None
+    TITLE_MESSAGE = None
+
+    def __perform_action(self, channel):
+        self.client._client.api_call(
+            self.SLACK_API_METHOD, channel=channel.id)
 
     def execute(self):
-        self.echo("==== Deleting Channels ====")
+        self.echo("==== {} ====".format(self.TITLE_MESSAGE))
 
         count = 0
         for channel in self.channels:
             self.echo("{id:<15} - {name:<30}".format(
                 id=channel.id,
                 name=channel.name))
-            self.__delete(channel)
+            self.__perform_action(channel)
             count += 1
 
-        self.echo("{} channels successfully deleted".format(count))
+        self.echo("{} channels successfully processed".format(count))
+
+
+class DeleteChannels(ActionChannelSubcommand):
+    SLACK_API_METHOD = 'channels.delete'
+    TITLE_MESSAGE = 'Deleting Channels'
+
+
+class ArchiveChannels(ActionChannelSubcommand):
+    SLACK_API_METHOD = 'channels.archive'
+    TITLE_MESSAGE = 'Archiving Channels'
 
 
 @slack.command()
@@ -80,7 +94,8 @@ def list_channels(ctx, exclude_archived, starts_with,
     subcommand = 'list'
     subcommand_classes = {
         'list': ListChannels,
-        'delete': DeleteChannels
+        'delete': DeleteChannels,
+        'archive': ArchiveChannels
     }
 
     if all([delete, archive]):
