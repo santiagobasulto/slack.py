@@ -60,12 +60,24 @@ class HighLevelSlackClient(object):
     def __init__(self, *args, **kwargs):
         self._client = SlackClient(*args, **kwargs)
 
+    def __request(self, method, **kwargs):
+        fail = kwargs.setdefault('fail', True)
+        del kwargs['fail']
+
+        resp = self._client.api_call(method, **kwargs)
+
+        if not resp['ok'] and fail:
+            raise FailedRequestException('`{}` request failed'.format(method))
+
+        return resp
+
+    def auth_test(self, **kwargs):
+        resp = self.__request('auth.test', **kwargs)
+        return resp
+
     @filtered
     def channels(self, **kwargs):
-        resp = self._client.api_call('channels.list', **kwargs)
-
-        if not resp['ok']:
-            raise FailedRequestException('`channels.list` request failed')
+        resp = self.__request('channels.list', **kwargs)
 
         for channel in resp['channels']:
             for filter in self.filters.values():

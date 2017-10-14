@@ -12,13 +12,13 @@ A command line tool to interface slack.
 All the subcommands require a Slack access token to work. You can pass the token either as a parameter:
 
 ```bash
-$ python main.py -a <AUTH-TOKEN> list_channels
+$ python main.py -a <AUTH-TOKEN> auth_test
 ```
 
 or as an environment variable:
 
 ```bash
-$ SLACK_API_TOKEN=<AUTH-TOKEN> python main.py list_channels
+$ SLACK_API_TOKEN=<AUTH-TOKEN> python main.py auth_test
 ```
 
 ### Channels
@@ -69,4 +69,4 @@ $ python main.py -a <AUTH-TOKEN> channels --starts-with 'z-visitor' --delete
 
 ## Slack API Rates
 
-Some commands like `--delete` channels can't be issued to frequently because the Slack API fails. That's why most commands have a `--sleep` parameter that will wait a given number of milliseconds before issuing new requests. You can try decreasing it by just passing `--sleep` to your commands. I couldn't find any official documentation for the correct time limits of some methods. I tried out and for example, deleting channels requires at least 10 seconds before every request.
+Some commands like `--delete` channels can't be issued too frequently because the Slack API fails. That's why most commands have a `--sleep` parameter that will wait a given number of milliseconds before issuing new requests. You can try decreasing it by just passing `--sleep` to your commands. I couldn't find any official documentation for the correct time limits of some methods. I tried out and for example, deleting channels requires at least 10 seconds before every request.

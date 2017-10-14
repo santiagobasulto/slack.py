@@ -1,7 +1,7 @@
 import pytest
 import responses
 from mock import MagicMock
-from api import HighLevelSlackClient
+from slack_cli.api import HighLevelSlackClient
 
 TOKEN = 'XYZ'
 
