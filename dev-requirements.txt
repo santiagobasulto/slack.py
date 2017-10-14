@@ -1,0 +1,5 @@
+-r requirements.txt
+
+mock==2.0.0
+pytest==3.2.3
+responses==0.8.1
