@@ -48,8 +48,8 @@ class HighLevelSlackClient(object):
     # A `filter` is a callable that receives:
     # p: The parameter passed by the user
     # c: The channel (raw json)
-    # and must return True if the channel passes the filter
-    # or `False` to drop it. Similar to `builtins.filter`
+    # and must return True if the channel passes the filter
+    # or `False` to drop it. Similar to `builtins.filter`
 
     FILTERS = {
         'only_archived': lambda p, c: c['is_archived'],

@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import time
 import click
 
@@ -23,7 +25,7 @@ class ListChannels(ChannelSubCommand):
     def execute(self):
         header = self.LINE_TEMPLATE.format(
             id='Channel ID', name='Channel Name', archived='Is Archived',
-            general="Is General", private="Is Private", members="Nº Members")
+            general="Is General", private="Is Private", members="No. Members")
         self.echo(header)
         report = {
             'private': 0,
