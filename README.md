@@ -21,6 +21,8 @@ or as an environment variable:
 $ SLACK_API_TOKEN=<AUTH-TOKEN> python main.py auth_test
 ```
 
+Authentication in Slack is based on OAuth and might be complicated to set it up. To get started, you can generate a personal token from this page: [https://api.slack.com/custom-integrations/legacy-tokens](https://api.slack.com/custom-integrations/legacy-tokens)
+
 ### Channels
 
 This commands allows you to interact with Slack channels (listing, archiving or deleting them). All these subcommands accept filters like `--starts-with` or `--contains`. Deleting and Archiving allow `--dry-run` mode to simulate the behavior without making real changes. **Be aware of Slack API Rates. See section below**

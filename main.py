@@ -88,5 +88,9 @@ def channels(ctx, id, exclude_archived, starts_with,
     cmd.execute()
 
 
-if __name__ == '__main__':
+def main():
     slack(obj={})
+
+
+if __name__ == '__main__':
+    main()
