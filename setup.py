@@ -24,11 +24,6 @@ if not all(VALUES.values()):
 
 
 version = VALUES['__version__']
-project_name = 'slack-cli'
-package_name = 'slack_cli'
-
-project_url = 'http://github.com/rmotr/{project_name}'.format(
-    project_name=project_name)
 
 
 class PyTest(TestCommand):
@@ -60,14 +55,12 @@ setup(
     name=VALUES['__title__'],
     version=version,
     description=VALUES['__description__'],
-    url=project_url,
-    download_url="{url}/tarball/{version}".format(
-        url=project_url, version=version),
+    url='https://github.com/santiagobasulto/slack-cli',
     author='Santiago Basulto',
     author_email='santiago@rmotr.com',
     license='MIT',
     scripts=['main.py'],
-    packages=[package_name],
+    packages=['slack_cli'],
     maintainer='Santiago Basulto',
     install_requires=read_requirements('requirements.txt'),
     tests_require=read_requirements('dev-requirements.txt'),

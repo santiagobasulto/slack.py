@@ -3,7 +3,10 @@
 A command line tool to interface slack.
 
 ## Install
-(TODO)
+
+```bash
+$ pip install slack.py
+```
 
 ## Usage
 
@@ -12,13 +15,13 @@ A command line tool to interface slack.
 All the subcommands require a Slack access token to work. You can pass the token either as a parameter:
 
 ```bash
-$ python main.py -a <AUTH-TOKEN> auth_test
+$ slack -a <AUTH-TOKEN> auth_test
 ```
 
 or as an environment variable:
 
 ```bash
-$ SLACK_API_TOKEN=<AUTH-TOKEN> python main.py auth_test
+$ SLACK_API_TOKEN=<AUTH-TOKEN> slack auth_test
 ```
 
 Authentication in Slack is based on OAuth and might be complicated to set it up. To get started, you can generate a personal token from this page: [https://api.slack.com/custom-integrations/legacy-tokens](https://api.slack.com/custom-integrations/legacy-tokens)
@@ -37,19 +40,19 @@ See examples below.
 List channels' ids, names, archived status:
 
 ```bash
-$ python main.py -a <AUTH-TOKEN> channels
+$ slack -a <AUTH-TOKEN> channels
 ```
 
 You can filter by `--starts-with`:
 
 ```bash
-$ python main.py -a <AUTH-TOKEN> channels --starts-with 'z-visitor'
+$ slack -a <AUTH-TOKEN> channels --starts-with 'z-visitor'
 ```
 
 And `--contains`:
 
 ```bash
-$ python main.py -a <AUTH-TOKEN> channels --contains 'visitor'
+$ slack -a <AUTH-TOKEN> channels --contains 'visitor'
 ```
 
 #### Archiving and Deleting Channels
@@ -58,7 +61,7 @@ $ python main.py -a <AUTH-TOKEN> channels --contains 'visitor'
 Use your usual `channels` filters and pass the `--archive` or `--delete` flags to either archive or delete the matching channels. **Try with the `--dry-run` flag before performing the real action to see which channels would be deleted.
 
 ```bash
-$ python main.py -a <AUTH-TOKEN> channels --starts-with 'z-visitor' --delete --dry-run --sleep 0
+$ slack -a <AUTH-TOKEN> channels --starts-with 'z-visitor' --delete --dry-run --sleep 0
 ```
 
 The `--sleep` parameter is required for `--archive` and `--delete` due to Slack API Rates. See below.
@@ -66,7 +69,7 @@ The `--sleep` parameter is required for `--archive` and `--delete` due to Slack 
 Finally, a **real** `--delete` command looks like:
 
 ```bash
-$ python main.py -a <AUTH-TOKEN> channels --starts-with 'z-visitor' --delete
+$ slack -a <AUTH-TOKEN> channels --starts-with 'z-visitor' --delete
 ```
 
 ## Slack API Rates
