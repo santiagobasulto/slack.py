@@ -34,7 +34,7 @@ See examples below.
 
 #### Listing Channels
 
-![image](https://user-images.githubusercontent.com/872296/31579597-cf395b06-b10f-11e7-8fd2-fc9681396dff.png)
+![image](https://user-images.githubusercontent.com/872296/31670230-8594d294-b32d-11e7-863f-fe2ba794d04e.png)
 
 
 List channels' ids, names, archived status:
@@ -58,7 +58,9 @@ $ slack -a <AUTH-TOKEN> channels --contains 'visitor'
 #### Archiving and Deleting Channels
 **_(Warning: Once a channel is deleted there's no way to restore it. Use it at your own risk)_**
 
-Use your usual `channels` filters and pass the `--archive` or `--delete` flags to either archive or delete the matching channels. **Try with the `--dry-run` flag before performing the real action to see which channels would be deleted.
+![deleting slack channels](https://user-images.githubusercontent.com/872296/31670267-98a97722-b32d-11e7-8540-33ad5f741470.png)
+
+Use your usual `channels` filters and pass the `--archive` or `--delete` flags to either archive or delete the matching channels. **Try your action with the `--dry-run` flag before performing the real action to see which channels would be deleted**.
 
 ```bash
 $ slack -a <AUTH-TOKEN> channels --starts-with 'z-visitor' --delete --dry-run --sleep 0
