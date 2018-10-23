@@ -44,6 +44,7 @@ def auth_test(ctx):
 @slack.command()
 @click.option('-i', '--id', type=str)
 @click.option('-r', '--exclude-archived', is_flag=True, default=False)
+@click.option('-R', '--only-archived', is_flag=True, default=False)
 @click.option('-s', '--starts-with', type=str)
 @click.option('-c', '--contains', type=str)
 @click.option('-n', '--name', type=str)
@@ -54,7 +55,7 @@ def auth_test(ctx):
     '--sleep', type=int, default=DEFAULT_SLEEP_IN_MILLISECONDS,
     help='Sleep time for Slack Rate API - in Milliseconds')
 @click.pass_context
-def channels(ctx, id, exclude_archived, starts_with,
+def channels(ctx, id, exclude_archived, only_archived, starts_with,
              contains, name, delete, archive, dry_run, sleep):
     subcommand = 'list'
     subcommand_classes = {
@@ -65,6 +66,8 @@ def channels(ctx, id, exclude_archived, starts_with,
 
     if all([delete, archive]):
         ctx.fail("You can't set both --delete and --archive.")
+    if all([exclude_archived, only_archived]):
+        ctx.fail("You can't set both --exclude-archived and --only-archived.")
 
     if delete:
         click.confirm(
@@ -80,6 +83,7 @@ def channels(ctx, id, exclude_archived, starts_with,
         id=id,
         name=name,
         exclude_archived=exclude_archived,
+        only_archived=only_archived,
         starts_with=starts_with,
         contains=contains,
         exclude_members=True
