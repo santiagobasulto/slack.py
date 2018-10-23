@@ -82,9 +82,8 @@ class HighLevelSlackClient(object):
         resp = self.__request('channels.list', **kwargs)
 
         for channel in resp['channels']:
-            yield_this = True
             for filter in self.filters.values():
                 if not filter(channel):
-                    yield_this = False
-            if yield_this:
+                    break
+            else:
                 yield Channel(channel)
