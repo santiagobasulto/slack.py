@@ -46,6 +46,7 @@ def auth_test(ctx):
 @click.option('-r', '--exclude-archived', is_flag=True, default=False)
 @click.option('-s', '--starts-with', type=str)
 @click.option('-c', '--contains', type=str)
+@click.option('-n', '--name', type=str)
 @click.option('--delete', is_flag=True, default=False)
 @click.option('--archive', is_flag=True, default=False)
 @click.option('--dry-run', is_flag=True, default=False)
@@ -54,7 +55,7 @@ def auth_test(ctx):
     help='Sleep time for Slack Rate API - in Milliseconds')
 @click.pass_context
 def channels(ctx, id, exclude_archived, starts_with,
-             contains, delete, archive, dry_run, sleep):
+             contains, name, delete, archive, dry_run, sleep):
     subcommand = 'list'
     subcommand_classes = {
         'list': ListChannels,
@@ -76,6 +77,8 @@ def channels(ctx, id, exclude_archived, starts_with,
 
     client = ctx.obj['client']
     channels = client.channels(**default_options(
+        id=id,
+        name=name,
         exclude_archived=exclude_archived,
         starts_with=starts_with,
         contains=contains,

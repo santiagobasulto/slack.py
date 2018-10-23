@@ -52,6 +52,8 @@ class HighLevelSlackClient(object):
     # or `False` to drop it. Similar to `builtins.filter`
 
     FILTERS = {
+        'id': lambda p, c: c['id'] == p,
+        'name': lambda p, c: c['name'] == p,
         'only_archived': lambda p, c: c['is_archived'],
         'is_archived': lambda p, c: c['is_archived'] is p,
         'starts_with': lambda p, c: c['name'].startswith(p)
@@ -80,8 +82,9 @@ class HighLevelSlackClient(object):
         resp = self.__request('channels.list', **kwargs)
 
         for channel in resp['channels']:
+            yield_this = True
             for filter in self.filters.values():
                 if not filter(channel):
-                    break
-            else:
+                    yield_this = False
+            if yield_this:
                 yield Channel(channel)
