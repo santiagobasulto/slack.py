@@ -42,18 +42,25 @@ def auth_test(ctx):
 
 
 @slack.command()
-@click.option('-i', '--id', type=str)
-@click.option('-r', '--exclude-archived', is_flag=True, default=False)
-@click.option('-R', '--only-archived', is_flag=True, default=False)
-@click.option('-s', '--starts-with', type=str)
-@click.option('-c', '--contains', type=str)
-@click.option('-n', '--name', type=str)
-@click.option('--delete', is_flag=True, default=False)
-@click.option('--archive', is_flag=True, default=False)
-@click.option('--dry-run', is_flag=True, default=False)
-@click.option(
-    '--sleep', type=int, default=DEFAULT_SLEEP_IN_MILLISECONDS,
-    help='Sleep time for Slack Rate API - in Milliseconds')
+@click.option('-i', '--id', type=str, help='Match channel ID')
+@click.option( '-r', '--exclude-archived', is_flag=True, default=False,
+        help='Match only active channels')
+@click.option('-R', '--only-archived', is_flag=True, default=False,
+        help='Match only archived channels')
+@click.option('-s', '--starts-with', type=str,
+        help='Match channels starting with given string')
+@click.option('-c', '--contains', type=str,
+        help='Match channels containing given string in name')
+@click.option('-n', '--name', type=str,
+        help='Match channels with name matching given string')
+@click.option('--delete', is_flag=True, default=False,
+        help='Delete matched channels')
+@click.option('--archive', is_flag=True, default=False,
+        help='Archive matched channels')
+@click.option('--dry-run', is_flag=True, default=False,
+        help='Dry-run; do not actually archive or delete channels')
+@click.option( '--sleep', type=int, default=DEFAULT_SLEEP_IN_MILLISECONDS,
+        help='Sleep time for Slack Rate API - in Milliseconds')
 @click.pass_context
 def channels(ctx, id, exclude_archived, only_archived, starts_with,
              contains, name, delete, archive, dry_run, sleep):
