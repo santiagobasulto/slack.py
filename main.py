@@ -59,7 +59,7 @@ def auth_test(ctx):
         help='Archive matched channels')
 @click.option('--dry-run', is_flag=True, default=False,
         help='Dry-run; do not actually archive or delete channels')
-@click.option( '--sleep', type=int, default=DEFAULT_SLEEP_IN_MILLISECONDS,
+@click.option('--sleep', type=int, default=DEFAULT_SLEEP_IN_MILLISECONDS,
         help='Sleep time for Slack Rate API - in Milliseconds')
 @click.pass_context
 def channels(ctx, id, exclude_archived, only_archived, starts_with,
