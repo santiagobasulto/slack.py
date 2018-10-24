@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
-import time
 import click
+import datetime
+import time
 
 from .utils import yes_no
 
@@ -20,12 +21,16 @@ class ChannelSubCommand(object):
 
 class ListChannels(ChannelSubCommand):
     LINE_TEMPLATE = ("|{id:^15}|{name:^30}|{archived:^12}|{general:^12}|"
-                     "{private:^12}|{members:^12}")
+                     "{private:^12}|{members:^12}|")
+    LINE_TEMPLATE_V = ("|{id:^15}|{name:^30}|{archived:^12}|{general:^12}|"
+                       "{private:^12}|{members:^12}|{created:^21}|{topic:^40}|")
 
     def execute(self):
-        header = self.LINE_TEMPLATE.format(
+        template = self.extras.get('verbose', False) and self.LINE_TEMPLATE_V or self.LINE_TEMPLATE
+        header = template.format(
             id='Channel ID', name='Channel Name', archived='Is Archived',
-            general="Is General", private="Is Private", members="No. Members")
+            general="Is General", private="Is Private", members="No. Members",
+            created="Created", topic="Topic")
         self.echo(header)
         report = {
             'private': 0,
@@ -39,12 +44,14 @@ class ListChannels(ChannelSubCommand):
             if channel.is_private:
                 report['private'] += 1
 
-            self.echo(self.LINE_TEMPLATE.format(
+            self.echo(template.format(
                 id=channel.id, name=channel.name,
                 archived=yes_no(channel.is_archived),
                 general=yes_no(channel.is_general),
                 private=yes_no(channel.is_private),
-                members=channel.num_members))
+                members=channel.num_members,
+                created=str(datetime.datetime.fromtimestamp(channel.created)),
+                topic=channel.topic['value'].replace('\n', ' ')[:38]))
 
         self.echo('\n' + '=' * len(header))
         msg = click.style(str(report['total']), reset=True)

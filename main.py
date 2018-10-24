@@ -61,9 +61,11 @@ def auth_test(ctx):
         help='Dry-run; do not actually archive or delete channels')
 @click.option('--sleep', type=int, default=DEFAULT_SLEEP_IN_MILLISECONDS,
         help='Sleep time for Slack Rate API - in Milliseconds')
+@click.option('-v', '--verbose', is_flag=True, default=False,
+        help='Display more details about channels')
 @click.pass_context
 def channels(ctx, id, exclude_archived, only_archived, starts_with,
-             contains, name, delete, archive, dry_run, sleep):
+             contains, name, delete, archive, dry_run, sleep, verbose):
     subcommand = 'list'
     subcommand_classes = {
         'list': ListChannels,
@@ -98,7 +100,7 @@ def channels(ctx, id, exclude_archived, only_archived, starts_with,
 
     SubcommandClass = subcommand_classes[subcommand]
     cmd = SubcommandClass(
-        client, channels, dry_run=dry_run, sleep=sleep)
+        client, channels, dry_run=dry_run, sleep=sleep, verbose=verbose)
     cmd.execute()
 
 
