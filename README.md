@@ -2,6 +2,8 @@
 
 # Project Archived: Slack has changed the API significantly and this doesn't work anymore.
 
+Leaving this here just for reading purposes.
+
 ---
 
 # Slack CMD
