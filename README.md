@@ -1,3 +1,9 @@
+---
+
+# Project Archived: Slack has changed the API significantly and this doesn't work anymore.
+
+---
+
 # Slack CMD
 
 A command line tool to interface slack.
